@@ -14,6 +14,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Install dependencies
+      uses: ./.github/actions/ubuntu-dependencies
+
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
 
@@ -36,6 +39,9 @@ jobs:
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
+    - name: Free Disk Space
+      uses: ./.github/actions/free-disk-space
+
     - name: Docker meta
       id: meta
       uses: docker/metadata-action@v5
@@ -43,7 +49,7 @@ jobs:
         images: energyweb/${{ github.event.repository.name }}
         tags: |
           type=raw,value=latest
-          type=sha,format=short
+          type=sha,format=short,prefix=,suffix=,lenth=7
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
