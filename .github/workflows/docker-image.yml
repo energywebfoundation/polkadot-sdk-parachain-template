@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  image-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +26,15 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Clean up space
+      run: |
+        sudo apt-get autoclean -y
+        sudo apt-get autoremove --purge -y
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /usr/local/.ghcup
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
     - name: Docker meta
       id: meta
